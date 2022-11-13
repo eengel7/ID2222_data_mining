@@ -3,7 +3,6 @@ import itertools
 import math
 import numpy
 from collections import defaultdict
-import numpy
 import sympy
 from scipy import sparse
 
@@ -63,7 +62,7 @@ class min_hashing:
         return signature
 
     def compute_universal_hash(self, x, a, b, p, m):
-        return((a*x = b) % p) % m
+        return((a*x + b) % p) % m
 
     def compute_signature_perm(self, char_matrix):
         n_signature, (n_shingles, n_docs) = self.n_signature, char_matrix.shape
@@ -106,7 +105,7 @@ class lsh:
 
         for band_idx in range(n_bands):
             band = signature[band_idx * rows_band:(band_idx+1)*rows_band]
-            for doc_id, column in enumerate(band.T)
+            for doc_id, column in enumerate(band.T):
                 column_buckets[tuple(column)].append(doc_id)
 
             for doc_ids in column_buckets.values():
