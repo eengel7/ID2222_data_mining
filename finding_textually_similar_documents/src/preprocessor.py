@@ -12,12 +12,11 @@ class Preprocessor:
         self.remove_punctuation = remove_punctuation
         self.normalize_whitespace = normalize_whitespace
 
+    # Removing accents 
     def strip_accents(self, doc):
         doc_nfkd = unicodedata.normalize('NFKD', doc)
         doc_ascii = doc_nfkd.encode('ASCII', 'ignore').decode('ascii')
         return doc_ascii
-
-   
 
     #Removing numbers
     def delete_numbers(self, doc):
@@ -37,9 +36,6 @@ class Preprocessor:
 
         if self.remove_accents:
             doc = self.strip_accents(doc)
-
-        #if self.remove_html:
-        #    doc = self.delete_html(doc)
 
         if self.remove_numbers:
             doc = self.delete_numbers(doc)
