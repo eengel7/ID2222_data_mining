@@ -15,13 +15,14 @@ def read_dataset(dataset_file, num_docs):
     with zipfile.ZipFile(dataset_path, 'r') as zip:
         # find the name of the JSON file inside the zip file
         files_namelist = zip.namelist()[:num_docs]
-        print(files_namelist)
 
         for file_name in files_namelist: 
             with zip.open(file_name) as file_json:
 
                 file = json.load(file_json)
                 docs.append(file['text'])
+    
+    print(f'Data set {dataset_file} is processed. {num_docs} documents are saved.')
     return docs
 
 
@@ -30,5 +31,4 @@ if __name__ == '__main__':
     num_docs = 5
 
     docs = read_dataset(dataset_file, num_docs)
-    print(f'Data set {dataset_file} is processed. {num_docs} documents are saved.')
 
