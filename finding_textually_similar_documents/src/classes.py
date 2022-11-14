@@ -3,7 +3,7 @@ import itertools
 import math
 from collections import defaultdict
 
-import numpy
+import numpy 
 import sympy
 from scipy import sparse
 
@@ -70,15 +70,15 @@ class Min_hashing:
         n_signature, (n_shingles, n_docs) = self.n_signature, char_matrix.shape
 
         # initialize the signature matrix with zeros
-        signature = np.zeros((n_signature, n_docs), dtype=np.int32)
+        signature = numpy.zeros((n_signature, n_docs), dtype=numpy.int32)
 
         for idx in range(n_signature):
             # permute the rows of the characteristic matrix
-            rand_idxs = np.random.permutation(n_shingles)
+            rand_idxs = numpy.random.permutation(n_shingles)
             char_matrix_perm = char_matrix[rand_idxs, :]
 
             # the minhash is the row-wise position of the first one
-            signature[idx, :] = np.argmax(char_matrix_perm, axis=0)
+            signature[idx, :] = numpy.argmax(char_matrix_perm, axis=0)
 
         return signature
 
@@ -124,15 +124,4 @@ class Lsh:
                 similar_documents.append(candidate)
         return similar_documents
 
-class Timer(object):
-    def __init__(self, name=None):
-        self.name = name
-
-    def __enter__(self):
-        self.tstart = time.time()
-
-    def __exit__(self, type, value, traceback):
-        if self.name:
-            print('[%s]' % self.name,)
-        print('Elapsed: %s' % (time.time() - self.tstart))
     
