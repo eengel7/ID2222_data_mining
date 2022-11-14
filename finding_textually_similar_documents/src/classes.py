@@ -49,22 +49,6 @@ class Min_hashing:
 
     def __init__(self, n_signature=500):
         self.n_signature = n_signature
-    
-    def compute_signature_hash(self, char_matrix):
-        n_signature, (n_shingles, n_docs) = self.n_signature, char_matrix.shape
-        signature = numpy.full((n_signature, n_docs), numpy.inf)
-        p = sympy.nextprime(n_shingles)
-        a = 2 * numpy.random.randint(0, p//2, n_signature) + 1
-        b = numpy.random.randint(0, p, n_signature)
-
-        for row_idx, doc_ids in enumerate(char_matrix.tolil().rows):
-            hashes = self.compute_universal_hash(row_idx, a, b, p, n_shingles)
-            for doc_id in doc_ids:
-                signature[:, doc_id] = numpy.where(hashes < signature[:, doc_id], hashes, signature[:, doc_id])
-        return signature
-
-    def compute_universal_hash(self, x, a, b, p, m):
-        return((a*x + b) % p) % m
 
     def compute_signature_perm(self, char_matrix):
         n_signature, (n_shingles, n_docs) = self.n_signature, char_matrix.shape
