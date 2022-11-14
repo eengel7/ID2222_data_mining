@@ -64,17 +64,6 @@ class min_hashing:
     def compute_universal_hash(self, x, a, b, p, m):
         return((a*x + b) % p) % m
 
-    def compute_signature_perm(self, char_matrix):
-        n_signature, (n_shingles, n_docs) = self.n_signature, char_matrix.shape
-        signature = numpy.zeros((n_signature, n_docs), dtype=numpy.int32)
-
-        for idx in range(n_signature):
-            rand_idxs = numpy.random.permutation(n_shingles)
-            char_matrix_perm = char_matrix[rand_idxs, :]
-            signature[idx, :] = numpy.argmax(char_matrix_perm, axis=0)
-
-        return signature
-
 class compare_signatures:
 
     def sig_similarity(signature, doc1, doc2):
