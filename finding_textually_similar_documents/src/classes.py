@@ -67,8 +67,9 @@ class Min_hashing:
         return signature
 
 class Compare_signatures:
-
+    
     def sig_similarity(signature, doc1, doc2):
+        # the fraction of minhash functions (rows) in which the signatures agree
         return numpy.mean(signature[:, doc1] == signature[:, doc2])
 
 class Lsh:
@@ -78,21 +79,32 @@ class Lsh:
         self.sim_threshold = sim_threshold
     
     def find_candidates(self, signature):
+        
+        # set the size of the bands and the corresponding row size
         n_bands, (n_signature, n_docs) = self.n_bands, signature.shape
         rows_band = math.ceil(n_signature / n_bands)
 
+        #initialize sets
         candidate_pairs = set()
         column_buckets = defaultdict(list)
 
         for band_idx in range(n_bands):
+            #obtain the rows that are parts of each band
             band = signature[band_idx * rows_band:(band_idx+1)*rows_band]
+            
+            #iterate over each of the columns that belong to each band
             for doc_id, column in enumerate(band.T):
+                # convert each vector to a tuple so it is hashable
+                # store each doc within band with identical hashes
                 column_buckets[tuple(column)].append(doc_id)
 
             for doc_ids in column_buckets.values():
+               # create combinations from each bucket as candidate pairs
                 pairwise_combos = itertools.combinations(doc_ids,2)
                 candidate_pairs.update(pairwise_combos)
             
+            # clear each bucket
+            # columns with same vector will not hash to the same bucket
             column_buckets.clear()
 
         return candidate_pairs
@@ -100,8 +112,10 @@ class Lsh:
 
     def find_similar(self, signature):
         candidate_pairs = self.find_candidates(signature)
+        # initialize
         similar_documents = []
 
+        # use predefined class function to compare lsh signatures of each candidate pair
         for candidate in candidate_pairs:
             doc_similarity = Compare_signatures.sig_similarity(signature, *candidate)
             if doc_similarity > self.sim_threshold:
